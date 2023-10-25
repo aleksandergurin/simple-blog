@@ -1,0 +1,73 @@
+### Get CSRF token
+GET localhost:8080/auth/csrf
+Accept: application/json
+
+> {% client.global.set("csrf_token", response.headers.valueOf("X-CSRFToken")); %}
+
+### Registration
+POST localhost:8080/auth/register
+Content-Type: application/json
+X-CSRFToken: {{csrf_token}}
+
+{
+  "email": "test@example.com",
+  "username": "john-doe",
+  "password": "some-testing-pwd"
+}
+
+### Login
+POST localhost:8080/auth/login
+Content-Type: application/json
+X-CSRFToken: {{csrf_token}}
+
+{
+  "username": "john-doe",
+  "password": "some-testing-pwd"
+}
+
+### Check authentication
+GET localhost:8080/auth/is-authenticated
+Accept: application/json
+
+### Add first post
+POST localhost:8080/api/post
+Content-Type: application/json
+X-CSRFToken: {{csrf_token}}
+
+{
+  "title": "First post",
+  "content": "First post's content."
+}
+
+### Get list of posts (query params: page, per_page).
+GET localhost:8080/api/post
+Accept: application/json
+
+### Get post details
+GET localhost:8080/api/post/1
+Accept: application/json
+
+### Add first comment
+POST localhost:8080/api/post/1/comment
+Content-Type: application/json
+X-CSRFToken: {{csrf_token}}
+
+{
+  "content": "First comment."
+}
+
+### Get post's comments (query params: page, per_page).
+GET localhost:8080/api/post/1/comment
+Accept: application/json
+
+### Get author's posts (query params: page, per_page).
+GET localhost:8080/api/author/1/post
+Accept: application/json
+
+### Get author's comments (query params: page, per_page).
+GET localhost:8080/api/author/1/comment
+Accept: application/json
+
+### Logout.
+GET localhost:8080/auth/logout
+Accept: application/json
